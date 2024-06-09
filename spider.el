@@ -5,6 +5,13 @@
 
 (defvar spider-session nil)
 
+(defmacro with-spider-session (session-bind &rest body)
+  (declare (indent 1))
+  `(progn
+     (spider-open)
+     (let ((,session-bind spider-session))
+       ,@body)))
+
 (defun spider-open ()
   (interactive)
   (unless spider-session
@@ -17,5 +24,20 @@
     (webdriver-session-stop spider-session)
     (setq spider-session nil)))
 
+(defun spider-goto-url (url)
+  (interactive "M") ; TODO offer completion
+  (with-spider-session s
+    (webdriver-goto-url s url)))
 
+(defun spider-scroll-down ()
+  (interactive)
+  (with-spider-session s
+    (webdriver-execute-synchronous-script s "window.scrollByLines(1);" [])))
 
+(defun spider-scroll-up ()
+  (interactive)
+  (with-spider-session s
+    (webdriver-execute-synchronous-script s "window.scrollByLines(-1)" [])))
+
+;; TODO
+(defun spider-follow-link ())
