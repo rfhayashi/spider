@@ -32,7 +32,7 @@
 (defun spider-scroll-down ()
   (interactive)
   (with-spider-session s
-    (webdriver-execute-synchronous-script s "window.scrollByLines(1);" [])))
+    (webdriver-execute-synchronous-script s "window.scrollByLines(1)" [])))
 
 (defun spider-scroll-up ()
   (interactive)
