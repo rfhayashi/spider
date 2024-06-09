@@ -39,5 +39,15 @@
   (with-spider-session s
     (webdriver-execute-synchronous-script s "window.scrollByLines(-1)" [])))
 
+(defun spider-go-back ()
+  (interactive)
+  (with-spider-session s
+    (webdriver-go-back s)))
+
+(defun spider-go-forward ()
+  (interactive)
+  (with-spider-session s
+    (webdriver-go-forward s)))
+
 ;; TODO
 (defun spider-follow-link ())
