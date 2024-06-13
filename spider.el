@@ -51,3 +51,17 @@
 
 ;; TODO
 (defun spider-follow-link ())
+
+;; evil key bindings
+
+(evil-define-state spider
+  "Spider state"
+  :tag "<Spider>")
+
+;; TODO do not use general
+(evil-global-set-key 'spider (kbd "ESC") 'evil-normal-state)
+(evil-global-set-key 'spider (kbd "j") 'spider-scroll-down)
+(evil-global-set-key 'spider (kbd "k") 'spider-scroll-up)
+
+;; REMOVE temporary for testing (depends on space-key-map from private emacs config)
+(define-key space-key-map (kbd "s") 'evil-spider-state)
