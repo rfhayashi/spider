@@ -39,6 +39,16 @@
   (with-spider-session s
     (webdriver-execute-synchronous-script s "window.scrollByLines(-1)" [])))
 
+(defun spider-scroll-top ()
+  (interactive)
+  (with-spider-session s
+    (webdriver-execute-synchronous-script s "window.scroll(0, 0)" [])))
+
+(defun spider-scroll-bottom ()
+  (interactive)
+  (with-spider-session s
+    (webdriver-execute-synchronous-script s "window.scroll(0, document.body.scrollHeight)" [])))
+
 (defun spider-go-back ()
   (interactive)
   (with-spider-session s
@@ -53,6 +63,7 @@
 (defun spider-follow-link ())
 
 ;; evil key bindings
+;; TODO avoid that non mapped keys insert characters in current buffer
 
 (evil-define-state spider
   "Spider state"
@@ -62,6 +73,8 @@
 (evil-global-set-key 'spider (kbd "ESC") 'evil-normal-state)
 (evil-global-set-key 'spider (kbd "j") 'spider-scroll-down)
 (evil-global-set-key 'spider (kbd "k") 'spider-scroll-up)
+(evil-global-set-key 'spider (kbd "gg") 'spider-scroll-top)
+(evil-global-set-key 'spider (kbd "G") 'spider-scroll-bottom)
 
 ;; REMOVE temporary for testing (depends on space-key-map from private emacs config)
 (define-key space-key-map (kbd "s") 'evil-spider-state)
