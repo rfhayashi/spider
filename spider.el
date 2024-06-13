@@ -76,5 +76,19 @@
 (evil-global-set-key 'spider (kbd "gg") 'spider-scroll-top)
 (evil-global-set-key 'spider (kbd "G") 'spider-scroll-bottom)
 
-;; REMOVE temporary for testing (depends on space-key-map from private emacs config)
+;; REMOVE temporary for testing
+
 (define-key space-key-map (kbd "s") 'evil-spider-state)
+
+(defun spider-execute-buffer-js ()
+  (interactive)
+  (with-spider-session s
+    (webdriver-execute-synchronous-script s (buffer-string) [])))
+
+(define-minor-mode spider-js-mode "Spider JS"
+  :init-value nil
+  :lighter "SpiderJs"
+  (when spider-js-mode
+    (evil-local-set-key 'normal ",e" 'spider-execute-buffer-js)))
+
+;; REMOVE temporary for testing
