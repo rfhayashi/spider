@@ -71,6 +71,7 @@
 ;; have a custom keymap where we add the keys and add it to minor-mode-map-alist
 ;; once the key is pressed or we don't follow link anymore we remove the keymap from minor-mode-map-alist
 ;; also understand emulation-mode-map-alist which might be a more appropriate way to do the same thing
+;; emulation-mode-map-alist seems to be the best option, we just need to create a symbol, add it to it, and set/unset the keymap in the symbol
 
 ;; evil key bindings
 ;; TODO avoid that non mapped keys insert characters in current buffer
