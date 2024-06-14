@@ -69,7 +69,6 @@
   "Spider state"
   :tag "<Spider>")
 
-;; TODO do not use general
 (evil-global-set-key 'spider (kbd "ESC") 'evil-normal-state)
 (evil-global-set-key 'spider (kbd "j") 'spider-scroll-down)
 (evil-global-set-key 'spider (kbd "k") 'spider-scroll-up)
