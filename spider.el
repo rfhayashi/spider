@@ -67,6 +67,11 @@
 ;; TODO
 (defun spider-follow-link ())
 
+;; idea for enabling the keys for follow link:
+;; have a custom keymap where we add the keys and add it to minor-mode-map-alist
+;; once the key is pressed or we don't follow link anymore we remove the keymap from minor-mode-map-alist
+;; also understand emulation-mode-map-alist which might be a more appropriate way to do the same thing
+
 ;; evil key bindings
 ;; TODO avoid that non mapped keys insert characters in current buffer
 
