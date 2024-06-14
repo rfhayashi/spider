@@ -59,6 +59,11 @@
   (with-spider-session s
     (webdriver-go-forward s)))
 
+(defun spider-reload-page ()
+  (interactive)
+  (with-spider-session s
+    (webdriver-refresh s)))
+
 ;; TODO
 (defun spider-follow-link ())
 
@@ -74,6 +79,7 @@
 (evil-global-set-key 'spider (kbd "k") 'spider-scroll-up)
 (evil-global-set-key 'spider (kbd "gg") 'spider-scroll-top)
 (evil-global-set-key 'spider (kbd "G") 'spider-scroll-bottom)
+(evil-global-set-key 'spider (kbd "r") 'spider-reload-page)
 
 ;; REMOVE temporary for testing
 
