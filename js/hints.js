@@ -11,7 +11,7 @@ for (const e of document.getElementsByTagName("a")) {
     div.style['background'] = '-webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFF785), color-stop(100%,#FFC542))'; 
     div.style['color'] = '#000';
     div.style['border'] = 'solid 1px #C38A22';
-    div.style['boder-radius'] = '3px';
+    div.style['border-radius'] = '3px';
     div.style['box-shadow'] = '0px 3px 7px 0px rgba(0, 0, 0, 0.3)';
     div.style.width = 'auto';
     var text = document.createTextNode("a");
