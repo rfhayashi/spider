@@ -74,11 +74,11 @@
 ;; emulation-mode-map-alist seems to be the best option, we just need to create a symbol, add it to it, and set/unset the keymap in the symbol
 
 ;; evil key bindings
-;; TODO avoid that non mapped keys insert characters in current buffer
 
 (evil-define-state spider
   "Spider state"
-  :tag "<Spider>")
+  :tag "<Spider>"
+  :suppress-keymap t)
 
 (evil-global-set-key 'spider (kbd "ESC") 'evil-normal-state)
 (evil-global-set-key 'spider (kbd "j") 'spider-scroll-down)
