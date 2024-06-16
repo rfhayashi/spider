@@ -64,14 +64,46 @@
   (with-spider-session s
     (webdriver-refresh s)))
 
-;; TODO
-(defun spider-follow-link ())
+(evil-define-state spider-hints
+  "Spider Hints state"
+  :tag "<SpiderHints>"
+  :supress-keymap t)
 
-;; idea for enabling the keys for follow link:
-;; have a custom keymap where we add the keys and add it to minor-mode-map-alist
-;; once the key is pressed or we don't follow link anymore we remove the keymap from minor-mode-map-alist
-;; also understand emulation-mode-map-alist which might be a more appropriate way to do the same thing
-;; emulation-mode-map-alist seems to be the best option, we just need to create a symbol, add it to it, and set/unset the keymap in the symbol
+(defun spider-disable-follow-links ()
+  (interactive)
+  (setq evil-spider-hints-state-map evil-suppress-map)
+  (evil-spider-state))
+
+;; TODO create links
+(defun spider-follow-links ()
+  (interactive)
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map evil-suppress-map)
+    (define-key map (kbd "ESC") 'spider-disable-follow-links)
+    (setq evil-spider-hints-state-map map)
+    (evil-spider-hints-state)))
+
+(evil-define-state spider-hints
+  "Spider Hints state"
+  :tag "<SpiderHints>"
+  :supress-keymap t)
+
+(defun spider-message ()
+  (interactive)
+  (message "hello spider"))
+
+(defun spider-disable-follow-links ()
+  (interactive)
+  (setq evil-spider-hints-state-map evil-suppress-map)
+  (evil-spider-state))
+
+(defun spider-follow-links ()
+  (interactive)
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map evil-suppress-map)
+    (define-key map (kbd "ESC") 'spider-disable-follow-links)
+    (setq evil-spider-hints-state-map map)
+    (evil-spider-hints-state)))
 
 ;; evil key bindings
 
@@ -86,6 +118,7 @@
 (evil-global-set-key 'spider (kbd "gg") 'spider-scroll-top)
 (evil-global-set-key 'spider (kbd "G") 'spider-scroll-bottom)
 (evil-global-set-key 'spider (kbd "r") 'spider-reload-page)
+(evil-global-set-key 'spider (kbd "f") 'spider-follow-links)
 
 ;; REMOVE temporary for testing
 
