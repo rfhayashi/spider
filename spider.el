@@ -2,6 +2,8 @@
 
 ;; TODO setup proper dependency
 (use-package webdriver)
+(use-package s)
+(use-package websocket)
 
 (defvar spider-session nil)
 
@@ -97,13 +99,37 @@
   (setq evil-spider-hints-state-map evil-suppress-map)
   (evil-spider-state))
 
-(defun spider-follow-links ()
-  (interactive)
-  (let ((map (make-sparse-keymap)))
-    (set-keymap-parent map evil-suppress-map)
-    (define-key map (kbd "ESC") 'spider-disable-follow-links)
-    (setq evil-spider-hints-state-map map)
-    (evil-spider-hints-state)))
+(cl-labels
+    ((clickable-elements ()
+       (with-spider-session s
+	 (webdriver-find-elements s (make-instance 'webdriver-by :strategy "tag name" :selector "a"))))
+
+     (element-rect (el)
+       (with-spider-session s
+	 (webdriver-get-element-rect s el)))
+
+     (add-hint (el)
+       (let* ((rect (element-rect el))
+	      (script (s-format (with-temp-buffer
+				  (insert-file-contents "js/hints.js")
+				  (buffer-string))
+				'aget
+				`((left . ,(slot-value rect 'x))
+				  (top . ,(slot-value rect 'y))
+				  (keybinding "A"))) ))
+	 (with-spider-session s script []))))
+  (defun spider-follow-links ()
+    (interactive)
+    (with-spider-session s
+      (webdriver-execute-synchronous-script s "var hints = document.createElement('div');\nhints.id = 'spider-hints';\ndocument.body.appendChild(hints);" []))
+    (seq-doseq (el (clickable-elements))
+      (message (prin1-to-string el))
+      (add-hint el)) 
+    (let ((map (make-sparse-keymap)))
+      (set-keymap-parent map evil-spider-state-map)
+      (define-key map (kbd "ESC") 'spider-disable-follow-links)
+      (setq evil-spider-hints-state-map map)
+      (evil-spider-hints-state))))
 
 ;; evil key bindings
 
