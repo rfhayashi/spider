@@ -1,70 +1,54 @@
 ;; -*- lexical-binding: t; -*-
 
 ;; TODO setup proper dependency
-(use-package webdriver)
 (use-package s)
 (use-package websocket)
 
-(defvar spider-session nil)
+(require 'json)
 
-(defmacro with-spider-session (session-bind &rest body)
-  (declare (indent 1))
-  `(progn
-     (spider-open)
-     (let ((,session-bind spider-session))
-       ,@body)))
+(defvar spider--ws nil)
 
-(defun spider-open ()
-  (interactive)
-  (unless spider-session
-    (setq spider-session (make-instance 'webdriver-session))
-    (webdriver-session-start spider-session)))
+(defvar spider--ws-server
+  (websocket-server
+   9999
+   :host 'local
+   :on-open (lambda (ws)
+	      (setq spider--ws ws))))
 
-(defun spider-close ()
-  (interactive)
-  (when spider-session
-    (webdriver-session-stop spider-session)
-    (setq spider-session nil)))
+(defun spider--send-command (command params)
+  (websocket-send-text spider--ws (json-encode (list :command command :params params))))
 
 (defun spider-goto-url (url)
-  (interactive "M") ; TODO offer completion
-  (with-spider-session s
-    (webdriver-goto-url s url)))
+  (interactive "M")
+  (spider--send-command "goto-url" (list :url url))) ; TODO offer completion
 
 (defun spider-scroll-down ()
   (interactive)
-  (with-spider-session s
-    (webdriver-execute-synchronous-script s "window.scrollByLines(1)" [])))
+  (spider--send-command "scroll-down" nil))
 
 (defun spider-scroll-up ()
   (interactive)
-  (with-spider-session s
-    (webdriver-execute-synchronous-script s "window.scrollByLines(-1)" [])))
+  (spider--send-command "scroll-up" nil))
 
 (defun spider-scroll-top ()
   (interactive)
-  (with-spider-session s
-    (webdriver-execute-synchronous-script s "window.scroll(0, 0)" [])))
+  (spider--send-command "scroll-top" nil))
 
 (defun spider-scroll-bottom ()
   (interactive)
-  (with-spider-session s
-    (webdriver-execute-synchronous-script s "window.scroll(0, document.body.scrollHeight)" [])))
+  (spider--send-command "scroll-bottom" nil))
 
 (defun spider-go-back ()
   (interactive)
-  (with-spider-session s
-    (webdriver-go-back s)))
+  (spider--send-command "go-back" nil))
 
 (defun spider-go-forward ()
   (interactive)
-  (with-spider-session s
-    (webdriver-go-forward s)))
+  (spider--send-command "go-forward" nil))
 
 (defun spider-reload-page ()
   (interactive)
-  (with-spider-session s
-    (webdriver-refresh s)))
+  (spider--send-command "reload-page" nil))
 
 (evil-define-state spider-hints
   "Spider Hints state"
@@ -160,5 +144,10 @@
   :lighter "SpiderJs"
   (when spider-js-mode
     (evil-local-set-key 'normal ",e" 'spider-execute-buffer-js)))
+
+(defun spider-test-extension ()
+  (interactive)
+  (let ((default-directory (expand-file-name "web" default-directory)))
+    (start-process "spider" "spider" "web-ext" "run" "--url" "https://example.org")))
 
 ;; REMOVE temporary for testing
