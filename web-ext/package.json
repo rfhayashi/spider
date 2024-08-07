@@ -1,0 +1,17 @@
+{
+  "name": "web-ext",
+  "version": "1.0.0",
+  "scripts": {
+    "squint": "squint",
+    "watch": "webpack --watch",
+    "test": "jest --watchAll"
+  },
+  "dependencies": {
+    "squint-cljs": "^0.8.113",
+    "webpack": "^5.93.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
